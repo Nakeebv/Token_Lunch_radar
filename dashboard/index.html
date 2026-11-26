@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Launch Radar — Pre-Token Valuation &amp; Farm Terminal</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="mark" aria-hidden="true">TLR</div>
+    <div>
+      <h1>Token Launch Radar</h1>
+      <p class="sub">Expected launch value = Conditional launch cap (5-fold CV Huber-ridge on peer mcap) &times; Token odds (logistic peer model). Strict exclusion of trading tokens, wrapped/staked assets, and CEXs.</p>
+    </div>
+  </div>
+  <div class="meta-pill" id="meta"></div>
+</header>
+
+<section class="strip" id="strip" aria-label="Integrity and model diagnostics"></section>
+
+<section class="controls" aria-label="Filters">
+  <div class="field grow">
+    <label for="q">Search protocol / slug / chain</label>
+    <input id="q" type="search" placeholder="Search name, slug, chain" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="segment">Segment</label>
+    <select id="segment">
+      <option value="all">All ranked</option>
+      <option value="watchlist">Watchlist (&ge;$50M)</option>
+      <option value="below">Below-floor (&lt;$50M)</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="cat">Category</label>
+    <select id="cat"></select>
+  </div>
+  <div class="field">
+    <label for="chain">Chain</label>
+    <select id="chain"></select>
+  </div>
+  <div class="field">
+    <label for="verdict">Farm verdict</label>
+    <select id="verdict">
+      <option value="all">All verdicts</option>
+      <option value="Watchlist Core">Watchlist Core</option>
+      <option value="High-Conviction Farm">High-Conviction Farm</option>
+      <option value="Asymmetric Early">Asymmetric Early</option>
+      <option value="Selective / Monitor">Selective / Monitor</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="sort">Sort by</label>
+    <select id="sort">
+      <option value="rank">Rank (expected)</option>
+      <option value="implied">Implied value</option>
+      <option value="conditional">Conditional cap</option>
+      <option value="tvl">TVL</option>
+      <option value="growth">7d momentum</option>
+      <option value="odds">Token odds</option>
+      <option value="age">Age (days)</option>
+    </select>
+  </div>
+  <button id="resetBtn" class="btn-reset" type="button">Reset</button>
+  <div class="count" id="count"></div>
+</section>
+
+<main class="layout">
+  <div class="main-col">
+    <section class="chart-card" aria-label="TVL vs Implied Value">
+      <div class="chart-head">
+        <div>
+          <h2>Launch Value Map (Log TVL vs Log Implied Value)</h2>
+          <p class="chart-sub">Cyan: watchlist (&ge;floor) &middot; Emerald: below-floor discovery &middot; Click any point to inspect</p>
+        </div>
+        <div class="legend">
+          <span><i class="dot dot-watch"></i>Watchlist</span>
+          <span><i class="dot dot-below"></i>Below-floor</span>
+        </div>
+      </div>
+      <div id="scatter" class="scatter"></div>
+    </section>
+
+    <section class="board" aria-label="Pre-token launch board">
+      <table id="board">
+        <thead>
+          <tr>
+            <th data-sort="rank">#</th>
+            <th data-sort="name">Protocol</th>
+            <th data-sort="category">Category</th>
+            <th data-sort="tvl">TVL</th>
+            <th data-sort="growth">7d</th>
+            <th data-sort="age">Age</th>
+            <th data-sort="conditional">Conditional</th>
+            <th data-sort="odds">Odds</th>
+            <th data-sort="implied">Implied</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="hint">Click any row or scatter dot to inspect valuation decomposition, peer comparables, and costed farm steps.</p>
+    </section>
+  </div>
+
+  <aside class="detail" id="detail" aria-label="Protocol detail inspector">
+    <div class="detail-head">
+      <div>
+        <h2 id="dName">Select a protocol</h2>
+        <div id="dSub" class="muted"></div>
+      </div>
+      <div id="dBadges"></div>
+    </div>
+    <div id="dBody" class="detail-body">
+      <p class="muted">Select a protocol from the board to inspect its valuation decomposition, nearest token-trading peers, and costed farm playbook.</p>
+    </div>
+  </aside>
+</main>
+
+<footer class="foot">
+  <p>Pre-token candidates only: tokens with recorded mcap, symbol, or gecko_id and wrapped/staked/bridged/CEX derivatives are separated upstream. Model values reflect peer-implied launch economics, not financial advice or token confirmation.</p>
+</footer>
+
+<script src="z-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
